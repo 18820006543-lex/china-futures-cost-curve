@@ -1,0 +1,61 @@
+{
+  "name": "china-futures-cost-curve",
+  "title": "中国商品期货成本线与估值分位数据集",
+  "description": "71 个中国商品期货品种的现金流成本线、完全成本上沿与估值分位日频数据，附 300 个交易日收盘价序列。",
+  "homepage": "https://autobothub.com/open-data.html",
+  "version": "2026.11.12",
+  "licenses": [
+    {
+      "name": "CC-BY-4.0",
+      "title": "Creative Commons Attribution 4.0 International",
+      "path": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "contributors": [
+    {
+      "title": "AutoBotHub 研究团队",
+      "path": "https://autobothub.com/about.html"
+    }
+  ],
+  "sources": [
+    {
+      "title": "AutoBotHub 开放数据",
+      "path": "https://autobothub.com/open-data.html"
+    }
+  ],
+  "resources": [
+    {
+      "name": "cost-curve",
+      "path": "cost_curve.csv",
+      "profile": "tabular-data-resource",
+      "format": "csv",
+      "encoding": "utf-8",
+      "schema": {
+        "fields": [
+          { "name": "品种代码", "type": "string" },
+          { "name": "品种名称", "type": "string" },
+          { "name": "交易所", "type": "string" },
+          { "name": "主力合约", "type": "string" },
+          { "name": "最新价", "type": "number" },
+          { "name": "现金流成本线", "type": "number" },
+          { "name": "完全成本上沿", "type": "number" },
+          { "name": "价格/现金流成本", "type": "number" },
+          { "name": "价格/完全成本上沿", "type": "number" },
+          { "name": "序列起始", "type": "date" },
+          { "name": "序列结束", "type": "date" },
+          { "name": "交易日数", "type": "integer" },
+          { "name": "数据来源", "type": "string" }
+        ]
+      }
+    }
+  ],
+  "keywords": [
+    "商品期货",
+    "成本线",
+    "估值分位",
+    "commodity futures",
+    "cost curve",
+    "valuation percentile",
+    "China futures"
+  ]
+}
