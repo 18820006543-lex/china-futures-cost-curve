@@ -94,3 +94,4 @@ BibTeX：
 - 品种数据页（永久地址，合约换月不变）：<https://autobothub.com/variety/>
 - 研究记录归档：<https://autobothub.com/reports-archive.html>
 - 站点与方法说明：<https://autobothub.com/about.html>
+- 数据集说明页（GitHub Pages 镜像，适合直接分享）：<https://18820006543-lex.github.io/china-futures-cost-curve/>
