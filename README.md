@@ -1,5 +1,7 @@
 # 中国商品期货成本线与估值分位数据集
 
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24148726.svg)](https://doi.org/10.5281/zenodo.24148726)
 71 个中国商品期货品种的**现金流成本线 / 完全成本上沿 / 估值分位**日频数据，附 300 个交易日的收盘价序列。
 
 > Daily cost-curve and valuation dataset for 71 Chinese commodity futures, with 300-day close price series.
