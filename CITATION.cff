@@ -2,6 +2,7 @@ cff-version: 1.2.0
 title: 中国商品期货成本线与估值分位数据集
 message: 引用时请保留来源链接与数据日期；跨品种比较比值无意义，请勿据此排序。
 type: dataset
+doi: "10.5281/zenodo.24148726"
 authors:
   - name: AutoBotHub Research Team
     affiliation: AutoBotHub
