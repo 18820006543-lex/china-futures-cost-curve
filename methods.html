@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>方法说明：成本线、成本区间驻留与枢轴价怎么算 | 中国商品期货成本曲线数据集</title>
+<meta name="description" content="现金流成本与完全成本上沿的区别、成本区间驻留（120 日窗口）的计算方式、枢轴价 PP 及 R1/R2/S1/S2 推导、20 日区间的用法，以及各自的失效场景。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://18820006543-lex.github.io/china-futures-cost-curve/methods.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="方法说明：四个指标怎么算，什么时候不能用">
+<meta property="og:description" content="现金流成本与完全成本上沿的区别、成本区间驻留（120 日窗口）的计算方式、枢轴价 PP 及 R1/R2/S1/S2 推导、20 日区间的用法，以及各自的失效场景。">
+<meta property="og:url" content="https://18820006543-lex.github.io/china-futures-cost-curve/methods.html">
+<meta name="twitter:card" content="summary">
+<style>
+:root{
+    --ink:#1a1a1f; --ink2:#4a4a55; --ink3:#7a7a88;
+    --bg:#ffffff; --bg2:#f7f7fa; --line:#e6e6ee;
+    --brand:#7132F5; --brand-soft:#f1ebff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.75 "IBM Plex Sans","Noto Sans SC",-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:var(--brand);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px}
+  header{border-bottom:1px solid var(--line);background:var(--bg2);padding:38px 0 30px}
+  .badge{display:inline-block;font-size:12px;letter-spacing:.04em;color:var(--brand);
+    background:var(--brand-soft);border-radius:999px;padding:3px 11px;margin-bottom:14px}
+  h1{font-size:28px;line-height:1.35;margin:0 0 10px;font-weight:650;letter-spacing:-.01em}
+  .sub{color:var(--ink2);font-size:15px;margin:0 0 18px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--ink3)}
+  .meta b{color:var(--ink2);font-weight:500}
+  main{padding:36px 0 10px}
+  h2{font-size:19px;margin:34px 0 10px;font-weight:620;letter-spacing:-.005em}
+  h2:first-child{margin-top:0}
+  h3{font-size:16px;margin:20px 0 6px;font-weight:600}
+  p{margin:0 0 12px;color:var(--ink2)}
+  ul,ol{margin:0 0 14px;padding-left:20px;color:var(--ink2)}
+  li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;margin:6px 0 16px;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--ink3);font-weight:500;font-size:13px;background:var(--bg2)}
+  code{font:13px/1.6 "IBM Plex Mono",Consolas,monospace;background:var(--bg2);
+    border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--ink)}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;overflow-x:auto;font:13px/1.65 "IBM Plex Mono",Consolas,monospace;color:var(--ink)}
+  .links{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:8px 0 6px}
+  .links a{display:block;border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+    background:var(--bg);transition:border-color .15s,background .15s}
+  .links a:hover{border-color:var(--brand);background:var(--brand-soft);text-decoration:none}
+  .links span{display:block;font-size:13px;color:var(--ink3);margin-top:2px}
+  .note{border-left:3px solid #E0524F;background:#fdf4f4;padding:12px 15px;border-radius:0 8px 8px 0;
+    font-size:14px;color:var(--ink2);margin:10px 0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0 6px}
+  .grid a{display:block;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:14px;
+    background:var(--bg);transition:border-color .15s,background .15s}
+  .grid a:hover{border-color:var(--brand);background:var(--brand-soft);text-decoration:none}
+  .grid b{display:block;font-weight:600;color:var(--ink)}
+  .grid span{font-size:12px;color:var(--ink3);font-family:"IBM Plex Mono",Consolas,monospace}
+  footer{border-top:1px solid var(--line);margin-top:42px;padding:22px 0 40px;font-size:13px;color:var(--ink3)}
+  footer a{color:var(--ink2)}
+  .faq h3{font-size:16px;margin:22px 0 4px}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "方法说明：四个指标怎么算，什么时候不能用",
+  "description": "现金流成本与完全成本上沿的区别、成本区间驻留（120 日窗口）的计算方式、枢轴价 PP 及 R1/R2/S1/S2 推导、20 日区间的用法，以及各自的失效场景。",
+  "url": "https://18820006543-lex.github.io/china-futures-cost-curve/methods.html",
+  "inLanguage": "zh-CN",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "中国商品期货成本曲线与估值数据集",
+    "url": "https://18820006543-lex.github.io/china-futures-cost-curve/"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "AutoBotHub 研究团队",
+    "url": "https://autobothub.com/about.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AutoBotHub 研究团队"
+  },
+  "license": "https://creativecommons.org/licenses/by/4.0/deed.zh"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "成本线是交易所公布的吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不是。成本线是模型估算值，由公开日线行情与公开成本模型推导，可完整复现，但不是官方数据。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "驻留比例高说明什么？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "说明近 120 个交易日里，价格多数时间处在现金流成本与完全成本上沿之间，即产业处于部分亏损但仍在生产的状态。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "枢轴价可以直接当支撑阻力用吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "它提供的是客观参照点，不是预测工具。跳空、换月、极端单边行情下会明显失效。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "为什么主力连续的价格不能直接跨月比较？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "换月处存在合约切换跳空，那不是价格变化。跨月比较应使用比例类指标或复权后的连续序列。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="badge">开放数据集 · CC BY 4.0</div>
+    <h1>方法说明：四个指标怎么算，什么时候不能用</h1>
+    <p class="sub">成本线 · 成本区间驻留 · 枢轴价 PP · 20 日区间 · 换月处理</p>
+    <div class="meta"><div><b>指标</b> 5 个核心字段</div><div><b>窗口</b> 驻留 120 日 / 区间 20 日</div><div><b>许可</b> CC BY 4.0</div></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2>四个指标分别是什么</h2>
+  <p>本数据集只有五个核心字段：收盘价、现金流成本、完全成本上沿、20 日区间、当日枢轴价，以及由前两者派生出的成本区间驻留。理解它们的算法，才能判断什么时候能用、什么时候不能用。</p>
+
+  <h2>一、现金流成本与完全成本上沿</h2>
+  <p>成本曲线不是一个点，而是一条带。产业里对同一个品种的成本，通行两种口径：</p>
+  <table>
+    <thead><tr><th>口径</th><th>包含</th><th>不包含</th></tr></thead>
+    <tbody>
+      <tr><td><code>cash_cost</code> 现金流成本</td><td>原料、能源、人工、辅料等实际现金支出</td><td>折旧、摊销、财务费用</td></tr>
+      <tr><td><code>full_cost</code> 完全成本上沿</td><td>现金流成本 + 折旧 + 摊销 + 财务费用</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p>两条线之间的区域，就是价格在「刚够覆盖现金支出」与「完全打平」之间的区间。价格跌破现金流成本，意味着行业开始出现现金亏损，减产动机最强；价格介于两条线之间，意味着部分产能亏损但仍在生产；价格站上完全成本上沿，意味着行业整体有利润。</p>
+
+  <h3>三个常见误用</h3>
+  <ol>
+    <li><strong>把成本当绝对真值。</strong>成本是模型估算，不同机构对同一品种的假设可以相差很大。它适合做相对位置与时间序列比较，不适合当绝对真值引用。</li>
+    <li><strong>忽略成本本身在移动。</strong>原料价格、能源价格、汇率变化都会推动成本线移动。价格没动而成本线上移，同样会改变位置判断。</li>
+    <li><strong>用单一品种的成本线跨品种比较。</strong>不同品种的合约乘数、计价单位不同，绝对数值不可比，只能比较相对位置。</li>
+  </ol>
+
+  <h2>二、成本区间驻留 <code>residence</code></h2>
+  <p>定义：近 120 个交易日中，收盘价落在 <code>[cash_cost, full_cost]</code> 区间内的天数占比。</p>
+  <p>这个指标回答的是「价格在成本带里待了多久」，而不是「价格离成本多远」。驻留比例高，说明市场对成本的定价长期处在模糊地带，缺乏方向性共识；驻留比例低，说明价格已经明确脱离成本带，要么在杀现金流成本，要么在有利润区间运行。</p>
+
+  <h3>三个使用前提</h3>
+  <ul>
+    <li>需要至少 120 个交易日的历史，新品种上市初期该字段为空。</li>
+    <li>换月跳空会污染窗口内的极值，跨换月比较时应看比例而不是绝对值。</li>
+    <li>驻留比例是状态描述，不是交易信号，不能单独用于方向判断。</li>
+  </ul>
+
+  <h2>三、当日枢轴价 <code>pp</code></h2>
+  <p>枢轴价采用经典算法：</p>
+  <pre>PP = (最高价 + 最低价 + 收盘价) / 3</pre>
+  <p>由 PP 派生第一层支撑与阻力：</p>
+  <pre>R1 = 2 × PP − 最低价
+S1 = 2 × PP − 最高价
+R2 = PP + (最高价 − 最低价)
+S2 = PP − (最高价 − 最低价)</pre>
+  <p>枢轴价的本质是「上一交易日价格分布的重心」，它把一天的三个关键价位压缩成一个参照点。它的作用是提供一个客观的、每日更新的参照，而不是预测方向。</p>
+
+  <h3>三个失效场景</h3>
+  <ul>
+    <li><strong>跳空开盘。</strong>当日开盘价远离 PP 时，PP 及其派生位在当日的参考意义大幅下降。</li>
+    <li><strong>换月当日。</strong>主力合约切换会带来价格跳变，前一日的 H/L/C 已不属于同一价格序列。</li>
+    <li><strong>极端单边行情。</strong>连续涨跌停期间价格分布严重偏斜，重心法会失真。</li>
+  </ul>
+
+  <h2>四、20 日区间 <code>range20</code></h2>
+  <p>近 20 个交易日的最高价与最低价。它给出的是短期波动的边界，用于判断当前价格在近一个月的相对位置。20 个交易日约等于一个自然月，是商品期货常用的短周期窗口。</p>
+
+  <h2>五、换月与连续价格</h2>
+  <p>主力连续合约在换月处存在跳空。这个跳空不是价格变化，而是合约切换造成的。因此：</p>
+  <ul>
+    <li>跨换月比较绝对价格会产生伪变化；</li>
+    <li>比较比例类指标（如驻留比例、相对成本位置）更稳健；</li>
+    <li>需要绝对价格连续序列时，必须做复权处理，而复权方式不同结果也不同。</li>
+  </ul>
+
+  <h2>这些指标的边界</h2>
+  <div class="note">
+    本数据集不含估值分位、基差、持仓量、手续费、保证金与涨跌停数据。做判断时不要把成本位置等同于估值结论——成本只回答「产业赚不赚钱」，不回答「市场愿不愿意给更高价格」。
+  </div>
+
+  <h2>常见问题</h2>
+  <div class="faq">
+    <h3>成本线是交易所公布的吗？</h3>
+    <p>不是。成本线是模型估算值，由公开日线行情与公开成本模型推导，可完整复现，但不是官方数据。</p>
+    <h3>驻留比例高说明什么？</h3>
+    <p>说明近 120 个交易日里，价格多数时间处在现金流成本与完全成本上沿之间，即产业处于「部分亏损但仍在生产」的状态。</p>
+    <h3>枢轴价可以直接当支撑阻力用吗？</h3>
+    <p>它提供的是客观参照点，不是预测工具。跳空、换月、极端单边行情下会明显失效。</p>
+    <h3>为什么主力连续的价格不能直接跨月比较？</h3>
+    <p>换月处存在合约切换跳空，那不是价格变化。跨月比较应使用比例类指标或复权后的连续序列。</p>
+  </div>
+
+  <h2>相关页面</h2>
+  <div class="links">
+    <a href="https://autobothub.com/open-data.html">开放数据说明<span>字段定义 · 口径限制 · 引用格式</span></a>
+    <a href="https://autobothub.com/variety/">品种数据总览<span>72 个品种的成本线与区间驻留</span></a>
+    <a href="https://autobothub.com/methods.html">方法专题<span>成本线、驻留、枢轴价的算法说明</span></a>
+    <a href="https://autobothub.com/citation.html">引用规范<span>数据集与页面的标准引用格式</span></a>
+    <a href="https://18820006543-lex.github.io/china-futures-cost-curve/methods.html">方法说明（本镜像）<span>四个指标的算法与失效场景</span></a>
+    <a href="https://18820006543-lex.github.io/china-futures-cost-curve/variety.html">品种目录（本镜像）<span>72 个品种索引</span></a>
+    <a href="https://18820006543-lex.github.io/china-futures-cost-curve/citation.html">引用格式（本镜像）<span>APA / GB/T 7714 / BibTeX</span></a>
+    <a href="https://18820006543-lex.github.io/china-futures-cost-curve/">数据集主页<span>概览与字段表</span></a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>中国商品期货成本曲线与估值数据集 · DOI <a href="https://doi.org/10.5281/zenodo.24148726">10.5281/zenodo.24148726</a> · CC BY 4.0</p>
+    <p>镜像与说明页，逐日更新的数据以 <a href="https://autobothub.com/">autobothub.com</a> 为准。</p>
+    <p>数据为模型估算，仅供研究参考，不构成投资建议。</p>
+  </div>
+</footer>
+
+</body>
+</html>
